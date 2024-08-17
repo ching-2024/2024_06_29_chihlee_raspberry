@@ -1,6 +1,7 @@
 import signal
 from gpiozero import Button,LED
 from datetime import datetime
+import paho.mqtt.publish as publish
 
 def user_release():
     print('user release button')
@@ -8,11 +9,23 @@ def user_release():
     now = datetime.now()
     now_str = now.strftime('%Y-%m-%d %H:%M:%S')
     print(now_str)
-
     if led.is_lit:
-        print('light on')
+        message = f'''{{
+            "status":true,
+            "date":{now_str},
+            "topic":"501classroom" 
+        }}'''
     else:
-        print('light off')
+        message = f'''{{
+            "status":false,
+            "date":{now_str},
+            "topic":"501classroom" 
+        }}'''
+    #end if led.is_lit:
+    #message = str(data)  #mqtt只收字串
+    print(message)
+    publish.single(topic='501classroom', payload=message, hostname='127.0.0.1', qos=2)
+
 
 if __name__ == '__main__':
     button = Button(pin=18)

@@ -2,3 +2,5 @@ redis
 RPi.GPIO
 lgpio
 gpiozero
+paho-mqtt
+python-dotenv
